@@ -1,0 +1,24 @@
+name: cd
+
+on:
+  workflow_run:
+    workflows: ['ci']
+    types:
+      - completed
+
+jobs:
+  start:
+    runs-on: movie-hw
+
+    steps:
+      - name: stop container
+        run: sudo docker container stop con-phim-service-movie
+      
+      - name: delete container
+        run: sudo docker container remove con-phim-service-movie
+
+      - name: delete image
+        run: sudo docker image remove phonghuynh1501/img-phim-service
+
+      - name: rerun source
+        run: sudo docker compose up -d

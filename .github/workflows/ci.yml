@@ -1,0 +1,21 @@
+name: ci
+
+on:
+  push:
+    branches: ['main']
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: login docker hub
+        run: docker login -u phonghuynh1501 -p ${{secrets.PASS_DOCKER}}
+
+      - name: build image
+        run: docker build -t phonghuynh1501/img-phim-service:latest .
+
+      - name: push image
+        run: docker push phonghuynh1501/img-phim-service:latest
