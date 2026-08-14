@@ -1,98 +1,803 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Movie Phim Service 🎬
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Phim Service là Microservice chịu trách nhiệm quản lý thông tin phim trong hệ thống đặt vé xem phim.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+Service xử lý:
 
-## Description
+- Danh sách phim
+- Banner phim
+- Tìm kiếm phim
+- Phân trang phim
+- Lọc phim theo ngày
+- Chi tiết phim
+- Thêm phim
+- Cập nhật phim
+- Upload hình ảnh phim
+- Xóa phim
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+Phim Service giao tiếp với Gateway thông qua RabbitMQ.
 
-## Project setup
+---
 
-```bash
-$ npm install
+# Architecture
+
+```
+                         Client
+                           |
+                           |
+                           v
+
+                    +-------------+
+                    |   Gateway   |
+                    |   NestJS    |
+                    +-------------+
+
+                           |
+                           |
+                      RabbitMQ
+
+                           |
+                           v
+
+                    +-------------+
+                    | Phim Service|
+                    |   NestJS    |
+                    +-------------+
+
+                           |
+                           v
+
+                    MySQL Database
 ```
 
-## Compile and run the project
+---
 
-```bash
-# development
-$ npm run start
+# Technology Stack
 
-# watch mode
-$ npm run start:dev
+## Backend
 
-# production mode
-$ npm run start:prod
-```
+- Node.js
+- NestJS
+- TypeScript
 
-## Run tests
+## Database
 
-```bash
-# unit tests
-$ npm run test
+- Prisma ORM
+- MySQL
 
-# e2e tests
-$ npm run test:e2e
+## Communication
 
-# test coverage
-$ npm run test:cov
-```
+- RabbitMQ
+
+## Upload Image
+
+- Multer
+- Cloudinary
+
+## Documentation
+
+- Swagger
 
 ## Deployment
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+- Docker
+- Docker Compose
+- GitHub Actions
+- Docker Hub
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+---
 
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+# Project Structure
+
+```
+phim-service
+
+├── src
+
+│
+├── module-api
+│
+│   └── quan-ly-phim
+│       │
+│       ├── dto
+│       │   ├── them-phim.dto.ts
+│       │   └── capNhatPhim.dto.ts
+│       │
+│       ├── quan-ly-phim.controller.ts
+│       ├── quan-ly-phim.service.ts
+│       └── quan-ly-phim.module.ts
+│
+│
+├── module-system
+│
+│   ├── prisma
+│   ├── cloudinary
+│   └── token
+│
+├── prisma
+│
+├── Dockerfile
+├── package.json
+└── README.md
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+---
 
-## Resources
+# API Documentation
 
-Check out a few resources that may come in handy when working with NestJS:
+Swagger:
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+```
+http://localhost:3069/api-docs
+```
 
-## Support
+Swagger hỗ trợ:
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+- API Testing
+- Query Parameters
+- Request Body
+- JWT Bearer Token
+- Multipart File Upload
 
-## Stay in touch
+---
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+# Movie APIs
 
-## License
+## 1. Lấy danh sách banner phim
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+API:
+
+```
+GET
+
+/api/QuanLyPhim/LayDanhSachBanner
+```
+
+Mục đích:
+
+Lấy danh sách banner phim.
+
+---
+
+# 2. Lấy danh sách phim
+
+
+API:
+
+```
+GET
+
+/api/QuanLyPhim/LayDanhSachPhim
+```
+
+
+Query:
+
+```
+tenPhim
+```
+
+
+Example:
+
+```
+/LayDanhSachPhim?tenPhim=Avengers
+```
+
+
+Parameter:
+
+| Parameter | Type | Required |
+|-|-|-|
+| tenPhim | string | false |
+
+
+---
+
+# 3. Lấy danh sách phim phân trang
+
+
+API:
+
+```
+GET
+
+/api/QuanLyPhim/LayDanhSachPhimPhanTrang
+```
+
+
+Query:
+
+```
+tenPhim
+
+soTrang
+
+soPhanTuTrenTrang
+```
+
+
+Example:
+
+```
+?tenPhim=Avengers
+&soTrang=1
+&soPhanTuTrenTrang=20
+```
+
+
+Default:
+
+```
+soTrang = 1
+
+soPhanTuTrenTrang = 20
+```
+
+---
+
+# 4. Lấy danh sách phim theo ngày
+
+
+API:
+
+```
+GET
+
+/api/QuanLyPhim/LayDanhSachPhimTheoNgay
+```
+
+
+Query:
+
+```
+tuNgay
+
+denNgay
+
+tenPhim
+
+soTrang
+
+soPhanTuTrenTrang
+```
+
+
+Example:
+
+```
+?tuNgay=2026-01-01
+&denNgay=2026-12-31
+&soTrang=1
+&soPhanTuTrenTrang=20
+```
+
+---
+
+# 5. Lấy thông tin phim
+
+
+API:
+
+```
+GET
+
+/api/QuanLyPhim/LayThongTinPhim
+```
+
+
+Query:
+
+```
+maPhim
+```
+
+
+Example:
+
+```
+/LayThongTinPhim?maPhim=1
+```
+
+
+Response:
+
+```json
+{
+    "maPhim":1,
+    "tenPhim":"Avengers",
+    "hinhAnh":"image_url"
+}
+```
+
+---
+
+# 6. Thêm phim upload hình
+
+
+API:
+
+```
+POST
+
+/api/QuanLyPhim/ThemPhimUploadHinh
+```
+
+
+Content-Type:
+
+```
+multipart/form-data
+```
+
+
+Body:
+
+```
+tenPhim
+trailer
+moTa
+frm
+```
+
+
+Example:
+
+```
+tenPhim:
+Avengers
+
+
+trailer:
+https://youtube.com/...
+
+
+moTa:
+Movie description
+
+
+frm:
+poster.jpg
+```
+
+
+Flow:
+
+```
+Gateway
+
+ |
+
+RabbitMQ
+
+ |
+
+Phim Service
+
+ |
+
+Upload Cloudinary
+
+ |
+
+Save Database
+```
+
+---
+
+# 7. Cập nhật phim upload hình
+
+
+API:
+
+```
+POST
+
+/api/QuanLyPhim/CapNhatPhimUpload
+```
+
+
+Require:
+
+```
+Bearer Token
+```
+
+
+Header:
+
+```http
+Authorization: Bearer <access_token>
+```
+
+
+Content-Type:
+
+```
+multipart/form-data
+```
+
+
+Body:
+
+```
+maPhim
+
+tenPhim
+
+trailer
+
+moTa
+
+ngayKhoiChieu
+
+danhGia
+
+hot
+
+dangChieu
+
+sapChieu
+
+frm
+```
+
+
+Example:
+
+```
+maPhim:
+1
+
+
+tenPhim:
+Avengers Endgame
+
+
+danhGia:
+9
+
+
+hot:
+true
+
+
+dangChieu:
+true
+
+
+sapChieu:
+false
+
+
+frm:
+poster.jpg
+```
+
+
+---
+
+# 8. Xóa phim
+
+
+API:
+
+```
+DELETE
+
+/api/QuanLyPhim/XoaPhim
+```
+
+
+Require:
+
+```
+Bearer Token
+```
+
+
+Header:
+
+```http
+Authorization: Bearer <access_token>
+```
+
+
+Query:
+
+```
+maPhim
+```
+
+
+Example:
+
+```
+/XoaPhim?maPhim=1
+```
+
+
+---
+
+# Authentication & Authorization
+
+
+Một số API yêu cầu quyền quản trị:
+
+
+Ví dụ:
+
+```
+CapNhatPhimUpload
+
+XoaPhim
+```
+
+
+Flow:
+
+```
+Client
+
+ |
+
+Bearer Token
+
+ |
+
+Gateway
+
+ |
+
+Verify JWT
+
+ |
+
+Phim Service
+
+ |
+
+Check Role QuanTri
+
+ |
+
+Execute Action
+```
+
+---
+
+# RabbitMQ Communication
+
+
+Flow:
+
+```
+Client
+
+ |
+
+HTTP Request
+
+ |
+
+Gateway
+
+ |
+
+RabbitMQ
+
+ |
+
+Phim Service
+
+ |
+
+Database
+```
+
+
+---
+
+# Cloudinary Upload
+
+
+Phim Service sử dụng Cloudinary để lưu hình ảnh.
+
+
+Flow:
+
+```
+Upload Image
+
+      |
+
+Multer
+
+      |
+
+Buffer
+
+      |
+
+Cloudinary
+
+      |
+
+Image URL
+
+      |
+
+MySQL
+```
+
+---
+
+# Environment Variables
+
+
+Tạo:
+
+```
+.env
+```
+
+
+Example:
+
+```env
+PORT=3072
+
+
+DATABASE_URL=mysql://root:password@database:3306/db_movie
+
+
+RABBITMQ_URL=amqp://user:password@rabbitmq:5672
+
+
+JWT_SECRET_KEY=your_secret
+
+
+CLOUDINARY_URL=your_cloudinary_url
+```
+
+---
+
+# Installation
+
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+---
+
+# Run Application
+
+
+Development:
+
+```bash
+npm run start:dev
+```
+
+
+Build:
+
+```bash
+npm run build
+```
+
+
+Production:
+
+```bash
+npm run start:prod
+```
+
+---
+
+# Docker
+
+
+Build image:
+
+```bash
+docker build \
+-t phonghuynh1501/img-phim-service:latest .
+```
+
+
+Push Docker Hub:
+
+```bash
+docker push phonghuynh1501/img-phim-service:latest
+```
+
+
+Run:
+
+```bash
+docker compose up -d
+```
+
+---
+
+# CI/CD Flow
+
+
+```
+Developer
+
+    |
+
+git push main
+
+    |
+
+GitHub Actions CI
+
+    |
+
+Docker Build
+
+    |
+
+Docker Hub
+
+    |
+
+GitHub Actions CD
+
+    |
+
+EC2 Self-hosted Runner
+
+    |
+
+Docker Compose Deploy
+```
+
+---
+
+# Related Services
+
+
+## Gateway
+
+Repository:
+
+https://github.com/huynhtuanphong1501/-movie--gateway
+
+
+## User Service
+
+Repository:
+
+https://github.com/huynhtuanphong1501/-movie--user-service
+
+
+## Rap Service
+
+Repository:
+
+https://github.com/huynhtuanphong1501/-movie--rap-service
+
+
+## Dat Ve Service
+
+Repository:
+
+https://github.com/huynhtuanphong1501/-movie--dat-ve-service
+
+
+---
+
+# Author
+
+**Huynh Tuan Phong**
+
+Movie Management System
+
+Microservices Architecture
